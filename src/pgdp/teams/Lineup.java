@@ -1,6 +1,6 @@
 package pgdp.teams;
 
-import java.util.Set;
+import java.util.*;
 
 public class Lineup {
 	private final int numberAttackers;
@@ -29,6 +29,38 @@ public class Lineup {
 	 */
 	private void computeScores() {
 		// TODO
+		//teamSkill is the sum of all "relevant" skill values
+		int att_relevant = attackers.stream()
+				.mapToInt(att -> att.attack)
+				.sum();
+		int def_relevant = defenders.stream()
+				.mapToInt(def -> def.defence)
+				.sum();
+		int sup_relevant = supporters.stream()
+				.mapToInt(sup -> sup.support)
+				.sum();
+		teamSkill = att_relevant + def_relevant + sup_relevant;
+
+		//teamSynergy is the sum of all synergies, for every pair that exists
+		Set<Penguin> allPenguins = new HashSet<>();
+		allPenguins.addAll(attackers);
+		allPenguins.addAll(defenders);
+		allPenguins.addAll(supporters);
+		Set<Penguin> checkedPenguins = new HashSet<>();
+		List<Integer> allSynergies = new ArrayList<>();
+
+		allPenguins.stream()
+				.forEach(penguin -> {
+					checkedPenguins.add(penguin);
+					allPenguins.stream()
+							.forEach(otherPengu -> allSynergies.add(
+									checkedPenguins.contains(otherPengu) ? 0 : penguin.getSynergy(otherPengu)));
+				});
+
+		teamSynergy = allSynergies.stream().mapToInt(n -> n).sum();
+
+		//teamScore is sum of teamSkill and teamSynergy
+		teamScore = teamSkill + teamSynergy;
 	}
 
 	public int getTeamScore() {
