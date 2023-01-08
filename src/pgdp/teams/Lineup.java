@@ -46,18 +46,28 @@ public class Lineup {
 		allPenguins.addAll(attackers);
 		allPenguins.addAll(defenders);
 		allPenguins.addAll(supporters);
-		Set<Penguin> checkedPenguins = new HashSet<>();
+		List<Penguin> checkedPenguins = new ArrayList<>();
 		List<Integer> allSynergies = new ArrayList<>();
 
 		allPenguins.stream()
 				.forEach(penguin -> {
 					checkedPenguins.add(penguin);
 					allPenguins.stream()
-							.forEach(otherPengu -> allSynergies.add(
-									checkedPenguins.contains(otherPengu) ? 0 : penguin.getSynergy(otherPengu)));
+							.forEach(otherPengu -> {
+								if (!checkedPenguins.contains(otherPengu)) {
+									if (attackers.contains(penguin) && attackers.contains(otherPengu)
+									|| defenders.contains(penguin) && defenders.contains(otherPengu)
+									|| supporters.contains(penguin) && supporters.contains(otherPengu)) {
+										allSynergies.add(penguin.getSynergy(otherPengu) * 2);
+									} else {
+										allSynergies.add(penguin.getSynergy(otherPengu));
+									}
+								}
+							});
 				});
 
 		teamSynergy = allSynergies.stream().mapToInt(n -> n).sum();
+		System.out.println(allSynergies);
 
 		//teamScore is sum of teamSkill and teamSynergy
 		teamScore = teamSkill + teamSynergy;
