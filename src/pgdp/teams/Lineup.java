@@ -124,7 +124,7 @@ public class Lineup {
 		// TODO
 		//get all different permutations of players and then just distribute from top to bottom
 		List<List<Penguin>> allPerms = calcAllPermutations(players);
-		Vector<Lineup> allLineups = new Vector<>(allPerms.size());
+		ArrayDeque<Lineup> allLineups = new ArrayDeque<>(allPerms.size());
 
 		for (List<Penguin> perm : allPerms) {
 			allLineups.add(distribute(perm, numberAttackers, numberDefenders, numberSupporters));
@@ -183,7 +183,7 @@ public class Lineup {
 			//set output to list in current iteration
 			output = current;
 		}
-
+		System.gc();
 		return output;
 	}
 
@@ -213,8 +213,8 @@ public class Lineup {
 	public static void main(String[] args) {
 		final boolean testComputeScores = false;
 		final boolean testComputeOptimalLineup = true;
-		final boolean testSmallExample = true;
-		final boolean testLargeExample = false;
+		final boolean testSmallExample = false;
+		final boolean testLargeExample = true;
 
 		if (testComputeScores) {
 			// example: computeScores small
