@@ -131,6 +131,7 @@ public class Lineup {
 		}*/
 		allPerms.stream()
 				.forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));
+		System.gc();
 		/*allPerms.stream()
 				.forEach(list -> {
 					Set<Penguin> attackers = new HashSet<>();
