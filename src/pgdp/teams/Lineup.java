@@ -119,7 +119,7 @@ public class Lineup {
 			int numberSupporters) {
 		// TODO
 		//get all different permutations of players and then just distribute from top to bottom
-		List<List<Penguin>> allPerms = calcAllPermutations(players);
+		Vector<List<Penguin>> allPerms = calcAllPermutations(players);
 		Vector<Lineup> allLineups = new Vector<>(allPerms.size());
 
 		/*for (List<Penguin> perm : allPerms) {
@@ -152,9 +152,9 @@ public class Lineup {
 		return allLineups.stream().reduce((l1, l2) -> l1.getTeamScore() > l2.getTeamScore() ? l1:l2).get();
 	}
 
-	public static List<List<Penguin>> calcAllPermutations(Set<Penguin> playersToDistribute) {
+	public static Vector<List<Penguin>> calcAllPermutations(Set<Penguin> playersToDistribute) {
 		//method calculates the possible permutations for playersToDistributeList
-		List<List<Penguin>> output = new ArrayList<>();
+		Vector<List<Penguin>> output = new Vector<>();
 		List<Penguin> playersToDistributeList = playersToDistribute.stream().toList();
 
 		//initialize output first element
@@ -163,7 +163,7 @@ public class Lineup {
 		for (int i = 0; i < playersToDistributeList.size(); i++) {
 			//for every player add a new list in current
 			//for every list in output add this one player and create a new list in current
-			List<List<Penguin>> current = new ArrayList<>();
+			Vector<List<Penguin>> current = new Vector<>();
 
 			int finalI = i;
 			output.stream()
