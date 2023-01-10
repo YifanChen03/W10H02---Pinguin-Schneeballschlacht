@@ -1,10 +1,6 @@
 package pgdp.teams;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Lineup {
 	private final int numberAttackers;
@@ -183,7 +179,7 @@ public class Lineup {
 			//set output to list in current iteration
 			output = current;
 		}
-		System.gc();
+
 		return output;
 	}
 
