@@ -124,16 +124,14 @@ public class Lineup {
 		//get all different permutations of players and then just distribute from top to bottom
 		List<List<Penguin>> allPerms = calcAllPermutations(players);
 		List<Lineup> allLineups = new ArrayList<>();
-		Lineup output;
 
 		allPerms.stream().
 				forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));
-		output = allLineups.stream()
+
+		return allLineups.stream()
 				.sorted(Comparator.comparingInt(Lineup::getTeamScore))
 				.collect(Collectors.toList())
 				.get(allLineups.size() - 1);
-
-		return output;
 	}
 
 	public static List<List<Penguin>> calcAllPermutations(Set<Penguin> playersToDistribute) {
