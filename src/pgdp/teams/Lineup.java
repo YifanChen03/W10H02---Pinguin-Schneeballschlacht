@@ -129,9 +129,11 @@ public class Lineup {
 		allPerms.stream().
 				forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));
 
-		return allLineups.stream()
+		/*return allLineups.stream()
 				.max(Comparator.comparingInt(Lineup::getTeamScore))
-				.orElse(null);
+				.orElse(null);*/
+		return allLineups.stream().reduce((l1, l2) -> l1.getTeamScore() > l2.getTeamScore() ? l1:l2)
+				.get();
 	}
 
 	public static List<List<Penguin>> calcAllPermutations(Set<Penguin> playersToDistribute) {
