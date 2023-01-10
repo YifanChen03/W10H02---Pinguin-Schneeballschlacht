@@ -119,6 +119,9 @@ public class Lineup {
 			int numberSupporters) {
 		// TODO
 		//get all different permutations of players and then just distribute from top to bottom
+		if (numberAttackers == 0 && numberDefenders == 0 && numberSupporters == 0) {
+			return new Lineup(new HashSet<>(0), new HashSet<>(0), new HashSet<>(0));
+		}
 		List<List<Penguin>> allPerms = calcAllPermutations(players);
 		Set<Lineup> allLineups = new HashSet<>();
 		int currentHighest = 0;
@@ -130,31 +133,7 @@ public class Lineup {
 				currentHighest = temp.getTeamScore();
 			}
 		}
-		/*allPerms.stream()
-				.forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));*/
-		//System.gc();
-		/*allPerms.stream()
-				.forEach(list -> {
-					Set<Penguin> attackers = new HashSet<>();
-					Set<Penguin> defenders = new HashSet<>();
-					Set<Penguin> supporters = new HashSet<>();
 
-					for (int i = 0; i < list.size(); i++) {
-						Penguin currentP = list.get(i);
-						if (i < numberAttackers) {
-							attackers.add(currentP);
-						} else if (i < numberDefenders + numberAttackers) {
-							defenders.add(currentP);
-						} else if (i < numberSupporters + numberDefenders + numberAttackers) {
-							supporters.add(currentP);
-						}
-					}
-					allLineups.add(new Lineup(attackers, defenders, supporters));
-				});*/
-		System.out.println(allLineups.size());
-		/*return allLineups.stream()
-				.max(Comparator.comparingInt(Lineup::getTeamScore))
-				.orElse(null);*/
 		return allLineups.stream().reduce((l1, l2) -> l1.getTeamScore() > l2.getTeamScore() ? l1:l2).get();
 	}
 
@@ -192,14 +171,7 @@ public class Lineup {
 	public static Lineup distribute(List<Penguin> perm, int n_attackers, int n_defenders, int n_supporters) {
 		//method distributes a certain permutation into sets of desired sizes
 		//might miss a better lineup if sum of numbers is smaller than perm.size()
-		/*Set<Penguin> attackers = new HashSet<>();
-		Set<Penguin> defenders = new HashSet<>();
-		Set<Penguin> supporters = new HashSet<>();
 
-		attackers.addAll(perm.subList(0, n_attackers));
-		defenders.addAll(perm.subList(n_attackers, n_attackers + n_defenders));
-		supporters.addAll(perm.subList(n_attackers + n_defenders,
-				n_attackers + n_defenders + n_supporters));*/
 		Set<Penguin> attackers = new HashSet<>();
 		Set<Penguin> defenders = new HashSet<>();
 		Set<Penguin> supporters = new HashSet<>();
@@ -220,14 +192,13 @@ public class Lineup {
 		output = new Lineup(attackers, defenders, supporters);
 
 		return output;
-		//return new Lineup(attackers, defenders, supporters);
 	}
 
 	public static void main(String[] args) {
 		final boolean testComputeScores = false;
 		final boolean testComputeOptimalLineup = true;
-		final boolean testSmallExample = false;
-		final boolean testLargeExample = true;
+		final boolean testSmallExample = true;
+		final boolean testLargeExample = false;
 
 		if (testComputeScores) {
 			// example: computeScores small
