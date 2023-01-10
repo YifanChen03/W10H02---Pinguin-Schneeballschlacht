@@ -120,7 +120,7 @@ public class Lineup {
 		// TODO
 		//get all different permutations of players and then just distribute from top to bottom
 		List<List<Penguin>> allPerms = calcAllPermutations(players);
-		Vector<Lineup> allLineups = new Vector<>();
+		Set<Lineup> allLineups = new HashSet<>();
 		int currentHighest = 0;
 
 		for (List<Penguin> perm : allPerms) {
