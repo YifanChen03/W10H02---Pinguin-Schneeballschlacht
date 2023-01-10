@@ -119,14 +119,19 @@ public class Lineup {
 			int numberSupporters) {
 		// TODO
 		//get all different permutations of players and then just distribute from top to bottom
-		Vector<List<Penguin>> allPerms = calcAllPermutations(players);
-		Set<Lineup> allLineups = new HashSet<>();
+		List<List<Penguin>> allPerms = calcAllPermutations(players);
+		Vector<Lineup> allLineups = new Vector<>();
+		int currentHighest = 0;
 
-		/*for (List<Penguin> perm : allPerms) {
-			allLineups.add(distribute(perm, numberAttackers, numberDefenders, numberSupporters));
-		}*/
-		allPerms.stream()
-				.forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));
+		for (List<Penguin> perm : allPerms) {
+			Lineup temp = distribute(perm, numberAttackers, numberDefenders, numberSupporters);
+			if (temp.getTeamScore() > currentHighest) {
+				allLineups.add(temp);
+				currentHighest = temp.getTeamScore();
+			}
+		}
+		/*allPerms.stream()
+				.forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));*/
 		//System.gc();
 		/*allPerms.stream()
 				.forEach(list -> {
@@ -146,16 +151,16 @@ public class Lineup {
 					}
 					allLineups.add(new Lineup(attackers, defenders, supporters));
 				});*/
-		//System.out.println(allLineups.size());
+		System.out.println(allLineups.size());
 		/*return allLineups.stream()
 				.max(Comparator.comparingInt(Lineup::getTeamScore))
 				.orElse(null);*/
 		return allLineups.stream().reduce((l1, l2) -> l1.getTeamScore() > l2.getTeamScore() ? l1:l2).get();
 	}
 
-	public static Vector<List<Penguin>> calcAllPermutations(Set<Penguin> playersToDistribute) {
+	public static List<List<Penguin>> calcAllPermutations(Set<Penguin> playersToDistribute) {
 		//method calculates the possible permutations for playersToDistributeList
-		Vector<List<Penguin>> output = new Vector<>();
+		List<List<Penguin>> output = new ArrayList<>();
 		List<Penguin> playersToDistributeList = playersToDistribute.stream().toList();
 
 		//initialize output first element
@@ -164,7 +169,7 @@ public class Lineup {
 		for (int i = 0; i < playersToDistributeList.size(); i++) {
 			//for every player add a new list in current
 			//for every list in output add this one player and create a new list in current
-			Vector<List<Penguin>> current = new Vector<>();
+			List<List<Penguin>> current = new ArrayList<>();
 
 			int finalI = i;
 			output.stream()
@@ -216,16 +221,6 @@ public class Lineup {
 
 		return output;
 		//return new Lineup(attackers, defenders, supporters);
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null || getClass() != obj.getClass()) {
-			return false;
-		}
-		return Objects.equals(teamScore, ((Lineup) obj).getTeamScore());
 	}
 
 	public static void main(String[] args) {
