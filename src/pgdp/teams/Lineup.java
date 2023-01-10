@@ -120,7 +120,7 @@ public class Lineup {
 		// TODO
 		//get all different permutations of players and then just distribute from top to bottom
 		Vector<List<Penguin>> allPerms = calcAllPermutations(players);
-		Vector<Lineup> allLineups = new Vector<>(allPerms.size());
+		Set<Lineup> allLineups = new HashSet<>();
 
 		/*for (List<Penguin> perm : allPerms) {
 			allLineups.add(distribute(perm, numberAttackers, numberDefenders, numberSupporters));
@@ -146,6 +146,7 @@ public class Lineup {
 					}
 					allLineups.add(new Lineup(attackers, defenders, supporters));
 				});*/
+		//System.out.println(allLineups.size());
 		/*return allLineups.stream()
 				.max(Comparator.comparingInt(Lineup::getTeamScore))
 				.orElse(null);*/
@@ -215,6 +216,16 @@ public class Lineup {
 
 		return output;
 		//return new Lineup(attackers, defenders, supporters);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		return Objects.equals(teamScore, ((Lineup) obj).getTeamScore());
 	}
 
 	public static void main(String[] args) {
