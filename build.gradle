@@ -15,7 +15,15 @@ sourceSets {
     }
     test {
         java {
-            srcDirs = []
+            srcDirs = ['test']
         }
     }
+}
+test {
+    useJUnitPlatform()
+    maxHeapSize = "100000m"
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 }

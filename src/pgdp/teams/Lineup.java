@@ -1,6 +1,9 @@
 package pgdp.teams;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Lineup {
 	private final int numberAttackers;
@@ -67,7 +70,6 @@ public class Lineup {
 				});
 
 		teamSynergy = allSynergies.stream().mapToInt(n -> n).sum();
-		System.out.println(allSynergies);
 
 		//teamScore is sum of teamSkill and teamSynergy
 		teamScore = teamSkill + teamSynergy;
@@ -119,12 +121,77 @@ public class Lineup {
 	public static Lineup computeOptimalLineup(Set<Penguin> players, int numberAttackers, int numberDefenders,
 			int numberSupporters) {
 		// TODO
-		return null;
+		//get all different permutations of players and then just distribute from top to bottom
+		List<List<Penguin>> allPerms = calcAllPermutations(players);
+		List<Lineup> allLineups = new ArrayList<>();
+		Lineup output;
+
+		allPerms.stream().
+				forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));
+		output = allLineups.stream()
+				.sorted(Comparator.comparingInt(Lineup::getTeamScore))
+				.collect(Collectors.toList())
+				.get(allLineups.size() - 1);
+
+		return output;
+	}
+
+	public static List<List<Penguin>> calcAllPermutations(Set<Penguin> playersToDistribute) {
+		//method calculates the possible permutations for playersToDistributeList
+		List<List<Penguin>> output = new ArrayList<>();
+		List<Penguin> playersToDistributeList = playersToDistribute.stream().toList();
+
+		//initialize output first element
+		output.add(new ArrayList<>());
+
+		for (int i = 0; i < playersToDistributeList.size(); i++) {
+			//for every player add a new list in current
+			//for every list in output add this one player and create a new list in current
+			List<List<Penguin>> current = new ArrayList<>();
+
+			int finalI = i;
+			output.stream()
+					.forEach(list -> {
+						for (int r = 0; r < list.size() + 1; r++) {
+							list.add(r, playersToDistributeList.get(finalI));
+							List temp = new ArrayList<>(list);
+							current.add(temp);
+							list.remove(r);
+						}
+					});
+
+			//set output to list in current iteration
+			output = current;
+		}
+
+		return output;
+	}
+
+	public static Lineup distribute(List<Penguin> perm, int n_attackers, int n_defenders, int n_supporters) {
+		//method distributes a certain permutation into sets of desired sizes
+		Set<Penguin> attackers = new HashSet<>();
+		Set<Penguin> defenders = new HashSet<>();
+		Set<Penguin> supporters = new HashSet<>();
+		Lineup output;
+
+		for (int i = 0; i < perm.size(); i++) {
+			Penguin currentP = perm.get(i);
+			if (i < n_attackers) {
+				attackers.add(currentP);
+			} else if (i < n_defenders + n_attackers) {
+				defenders.add(currentP);
+			} else if (i < n_supporters + n_defenders + n_attackers){
+				supporters.add(currentP);
+			}
+		}
+		output = new Lineup(attackers, defenders, supporters);
+
+		return output;
 	}
 
 	public static void main(String[] args) {
-		final boolean testComputeScores = true;
-		final boolean testComputeOptimalLineup = false;
+		final boolean testComputeScores = false;
+		final boolean testComputeOptimalLineup = true;
 		final boolean testSmallExample = true;
 		final boolean testLargeExample = false;
 
