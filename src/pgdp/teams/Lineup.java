@@ -124,10 +124,10 @@ public class Lineup {
 		// TODO
 		//get all different permutations of players and then just distribute from top to bottom
 		List<List<Penguin>> allPerms = calcAllPermutations(players);
-		ArrayDeque<Lineup> allLineups = new ArrayDeque<>(allPerms.size());
+		Vector<Lineup> allLineups = new Vector<>(allPerms.size());
 
-		for (int i = 0; i < allPerms.size(); i++) {
-			allLineups.addFirst(distribute(allPerms.get(i), numberAttackers, numberDefenders, numberSupporters));
+		for (List<Penguin> perm : allPerms) {
+			allLineups.add(distribute(perm, numberAttackers, numberDefenders, numberSupporters));
 		}
 		/*allPerms.stream()
 				.forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));*/
