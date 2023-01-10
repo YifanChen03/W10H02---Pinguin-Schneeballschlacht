@@ -122,11 +122,11 @@ public class Lineup {
 		List<List<Penguin>> allPerms = calcAllPermutations(players);
 		Vector<Lineup> allLineups = new Vector<>(allPerms.size());
 
-		for (List<Penguin> perm : allPerms) {
+		/*for (List<Penguin> perm : allPerms) {
 			allLineups.add(distribute(perm, numberAttackers, numberDefenders, numberSupporters));
-		}
-		/*allPerms.stream()
-				.forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));*/
+		}*/
+		allPerms.stream()
+				.forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));
 		//System.gc();
 		/*allPerms.stream()
 				.forEach(list -> {
