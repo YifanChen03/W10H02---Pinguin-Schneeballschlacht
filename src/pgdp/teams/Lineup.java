@@ -169,6 +169,7 @@ public class Lineup {
 
 	public static Lineup distribute(List<Penguin> perm, int n_attackers, int n_defenders, int n_supporters) {
 		//method distributes a certain permutation into sets of desired sizes
+		//might miss a better lineup if sum of numbers is smaller than perm.size()
 		Set<Penguin> attackers = new HashSet<>();
 		Set<Penguin> defenders = new HashSet<>();
 		Set<Penguin> supporters = new HashSet<>();
