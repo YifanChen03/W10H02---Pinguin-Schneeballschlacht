@@ -2,6 +2,7 @@ package pgdp.teams;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -129,9 +130,8 @@ public class Lineup {
 				forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));
 
 		return allLineups.stream()
-				.sorted(Comparator.comparingInt(Lineup::getTeamScore))
-				.collect(Collectors.toList())
-				.get(allLineups.size() - 1);
+				.max(Comparator.comparingInt(Lineup::getTeamScore))
+				.orElse(null);
 	}
 
 	public static List<List<Penguin>> calcAllPermutations(Set<Penguin> playersToDistribute) {
@@ -179,7 +179,7 @@ public class Lineup {
 				attackers.add(currentP);
 			} else if (i < n_defenders + n_attackers) {
 				defenders.add(currentP);
-			} else if (i < n_supporters + n_defenders + n_attackers){
+			} else if (i < n_supporters + n_defenders + n_attackers) {
 				supporters.add(currentP);
 			}
 		}
