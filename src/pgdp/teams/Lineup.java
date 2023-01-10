@@ -124,16 +124,33 @@ public class Lineup {
 		// TODO
 		//get all different permutations of players and then just distribute from top to bottom
 		List<List<Penguin>> allPerms = calcAllPermutations(players);
-		List<Lineup> allLineups = new ArrayList<>();
+		Vector<Lineup> allLineups = new Vector<>();
 
-		allPerms.stream().
-				forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));
+		allPerms.stream()
+				.forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));
+		/*allPerms.stream()
+				.forEach(list -> {
+					Set<Penguin> attackers = new HashSet<>();
+					Set<Penguin> defenders = new HashSet<>();
+					Set<Penguin> supporters = new HashSet<>();
+
+					for (int i = 0; i < list.size(); i++) {
+						Penguin currentP = list.get(i);
+						if (i < numberAttackers) {
+							attackers.add(currentP);
+						} else if (i < numberDefenders + numberAttackers) {
+							defenders.add(currentP);
+						} else if (i < numberSupporters + numberDefenders + numberAttackers) {
+							supporters.add(currentP);
+						}
+					}
+					allLineups.add(new Lineup(attackers, defenders, supporters));
+				});*/
 
 		/*return allLineups.stream()
 				.max(Comparator.comparingInt(Lineup::getTeamScore))
 				.orElse(null);*/
-		return allLineups.stream().reduce((l1, l2) -> l1.getTeamScore() > l2.getTeamScore() ? l1:l2)
-				.get();
+		return allLineups.stream().reduce((l1, l2) -> l1.getTeamScore() > l2.getTeamScore() ? l1:l2).get();
 	}
 
 	public static List<List<Penguin>> calcAllPermutations(Set<Penguin> playersToDistribute) {
