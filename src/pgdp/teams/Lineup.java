@@ -120,14 +120,14 @@ public class Lineup {
 		// TODO
 		//get all different permutations of players and then just distribute from top to bottom
 		List<List<Penguin>> allPerms = calcAllPermutations(players);
-		ArrayDeque<Lineup> allLineups = new ArrayDeque<>(allPerms.size());
+		Vector<Lineup> allLineups = new Vector<>(allPerms.size());
 
 		for (List<Penguin> perm : allPerms) {
 			allLineups.add(distribute(perm, numberAttackers, numberDefenders, numberSupporters));
 		}
 		/*allPerms.stream()
 				.forEach(list -> allLineups.add(distribute(list, numberAttackers, numberDefenders, numberSupporters)));*/
-		System.gc();
+		//System.gc();
 		/*allPerms.stream()
 				.forEach(list -> {
 					Set<Penguin> attackers = new HashSet<>();
@@ -186,24 +186,35 @@ public class Lineup {
 	public static Lineup distribute(List<Penguin> perm, int n_attackers, int n_defenders, int n_supporters) {
 		//method distributes a certain permutation into sets of desired sizes
 		//might miss a better lineup if sum of numbers is smaller than perm.size()
+		/*Set<Penguin> attackers = new HashSet<>();
+		Set<Penguin> defenders = new HashSet<>();
+		Set<Penguin> supporters = new HashSet<>();
+
+		attackers.addAll(perm.subList(0, n_attackers));
+		defenders.addAll(perm.subList(n_attackers, n_attackers + n_defenders));
+		supporters.addAll(perm.subList(n_attackers + n_defenders,
+				n_attackers + n_defenders + n_supporters));*/
 		Set<Penguin> attackers = new HashSet<>();
 		Set<Penguin> defenders = new HashSet<>();
 		Set<Penguin> supporters = new HashSet<>();
 		Lineup output;
+		int n2 = n_attackers + n_defenders;
+		int n3 = n2 + n_supporters;
 
 		for (int i = 0; i < perm.size(); i++) {
 			Penguin currentP = perm.get(i);
 			if (i < n_attackers) {
 				attackers.add(currentP);
-			} else if (i < n_defenders + n_attackers) {
+			} else if (i < n2) {
 				defenders.add(currentP);
-			} else if (i < n_supporters + n_defenders + n_attackers) {
+			} else if (i < n3) {
 				supporters.add(currentP);
 			}
 		}
 		output = new Lineup(attackers, defenders, supporters);
 
 		return output;
+		//return new Lineup(attackers, defenders, supporters);
 	}
 
 	public static void main(String[] args) {
